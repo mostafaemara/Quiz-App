@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_app/answers.dart';
 import 'package:quiz_app/question.dart';
+import 'package:quiz_app/result.dart';
+
+import 'quiz.dart';
 
 void main() => runApp(MyApp());
 
@@ -10,21 +14,51 @@ class MyApp extends StatefulWidget {
 
 class MyAppState extends State<MyApp> {
   var index = 0;
-  void answerQQuestion() {
-    setState(() {
-      if(index<=1){
-      index++;
-      }else{
+  int _totalScore=0;
+    void _answerQuestion(int score) {
 
-        index=0;
-      }
+      _totalScore+=score;
+    setState(() {
+      
+        index++;
+     
     });
   }
 
   var questions = [
-    "whats your fav Color ?",
-    "Whats your favorite Drink?",
-    "whats your favorite Actor?"
+    {
+      "questionText": "Whats your favorite Color ?",
+      "answers": [
+        {"text": "Black", "score": 10},
+        {"text": "Red", "score": 3},
+        {"text": "Green", "score": 5},
+        {"text": "White", "score": 8},
+        {"text": "Gray", "score": 6},
+        {"text": "Yellow", "score": 4},
+        {"text": "BLue", "score": 10}
+      ]
+    },
+    {
+      "questionText": "Whats your favorite drink ?",
+      "answers": [
+        {"text": "Coffe", "score": 7},
+        {"text": "Lemon Juice", "score": 5},
+        {"text": "Tea", "score": 3},
+        {"text": "Mango Juice", "score": 10},
+      ]
+    },
+    {
+      "questionText": "Who is your favorite Super Hero ?",
+      "answers": [
+        {"text": "Batman", "score": 10},
+        {"text": "Superman", "score": 8},
+        {"text": "The Flash", "score": 5},
+        {"text": "Doctor Fate", "score": 2},
+        {"text": "Green Arrow", "score": 4},
+        {"text": "Black Canary", "score": 1},
+        {"text": "Wounder Woman", "score": 7}
+      ]
+    },
   ];
   @override
   Widget build(BuildContext context) {
@@ -33,29 +67,20 @@ class MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: Text("My App"),
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Question(questions[index]),
-            RaisedButton(
-              onPressed: answerQQuestion,
-              child: Text("Answer 1"),
-            ),
-            RaisedButton(
-               onPressed: answerQQuestion,
-              child: Text("Answer 2"),
-            ),
-            RaisedButton(
-               onPressed: answerQQuestion,
-              child: Text("Answer 3"),
-            ),
-            RaisedButton(
-              onPressed: answerQQuestion,
-              child: Text("Answer 4"),
-            ),
-          ],
-        ),
+        body: index<questions.length?
+        Quiz(question: questions[index],
+        answerQuestion: _answerQuestion,)
+        :Result(resultScore: _totalScore,restQuiz: _restQuiz,)
       ),
     );
+  }
+
+  void _restQuiz(){
+
+  setState(() {
+      index=0;
+    _totalScore=0;
+    });
+    
   }
 }
